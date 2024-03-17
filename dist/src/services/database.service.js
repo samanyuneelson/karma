@@ -46,8 +46,10 @@ function connectToDatabase() {
         yield client.connect();
         const db = client.db(process.env.DB_NAME);
         const karmasCollection = db.collection(process.env.KARMAS_COLLECTION_NAME);
+        const trackerCollection = db.collection(process.env.TRACKER_COLLECTION_NAME);
         exports.collections.karmas = karmasCollection;
-        console.log(`Successfully connected to database: ${db.databaseName} and collection: ${karmasCollection.collectionName}`);
+        exports.collections.tracker = trackerCollection;
+        console.log(`Successfully connected to database: ${db.databaseName} and collection: ${exports.collections.karmas, exports.collections.tracker}}`);
     });
 }
 exports.connectToDatabase = connectToDatabase;

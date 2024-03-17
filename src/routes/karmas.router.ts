@@ -2,7 +2,7 @@
 import express, { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import { collections } from "../services/database.service";
-import Karma from "../models/";
+import {Karma} from "../models/";
 
 // Global Config
 export const karmaRouter = express.Router();
@@ -42,9 +42,9 @@ karmaRouter.get("/:id", async (req: Request, res: Response) => {
 // POST
 karmaRouter.post("/", async (req: Request, res: Response) => {
     try {
+        console.log("Post request body:", req.body)
         const newKarma = req.body as Karma;
         newKarma.log_time = newKarma.log_time ?? Date.now(); 
-        console.log("Post request body:", newKarma)
         const result = await collections.karmas?.insertOne(newKarma);
 
         result

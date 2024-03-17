@@ -3,7 +3,7 @@ import * as mongoDB from "mongodb";
 import * as dotenv from "dotenv";
 
 // Global Variables
-export const collections: { karmas?: mongoDB.Collection } = {};
+export const collections: { karmas?: mongoDB.Collection, tracker?: mongoDB.Collection } = {};
 
 // Initialize Connection
 export async function connectToDatabase() {
@@ -16,9 +16,11 @@ export async function connectToDatabase() {
   const db: mongoDB.Db = client.db(process.env.DB_NAME);
 
   const karmasCollection: mongoDB.Collection = db.collection(process.env.KARMAS_COLLECTION_NAME!);
+  const trackerCollection: mongoDB.Collection = db.collection(process.env.TRACKER_COLLECTION_NAME!);
 
   collections.karmas = karmasCollection;
+  collections.tracker = trackerCollection;
 
-  console.log(`Successfully connected to database: ${db.databaseName} and collection: ${karmasCollection.collectionName}`);
+  console.log(`Successfully connected to database: ${db.databaseName} and collection: ${collections.karmas, collections.tracker}}`);
 
 }

@@ -28,14 +28,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const database_service_1 = require("./src/services/database.service");
-const karmas_router_1 = require("./src/routes/karmas.router");
 const dotenv = __importStar(require("dotenv"));
+const routes_1 = require("./src/routes");
+const cors_1 = __importDefault(require("cors"));
 dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 (0, database_service_1.connectToDatabase)()
     .then(() => {
-    app.use("/karmas", karmas_router_1.karmaRouter);
+    app.use((0, cors_1.default)());
+    app.use("/karmas", routes_1.karmaRouter);
+    app.use("/tracker", routes_1.trackerRouter);
     app.listen(port, () => {
         console.log(`Server started at http://localhost:${port}`);
     });

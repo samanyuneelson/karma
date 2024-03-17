@@ -12,33 +12,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.karmaRouter = void 0;
-// External Dependencies
+exports.trackerRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const mongodb_1 = require("mongodb");
 const database_service_1 = require("../services/database.service");
 // Global Config
-exports.karmaRouter = express_1.default.Router();
-exports.karmaRouter.use(express_1.default.json());
+exports.trackerRouter = express_1.default.Router();
+exports.trackerRouter.use(express_1.default.json());
 // GET
-exports.karmaRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.trackerRouter.get("/", (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
-        const karmas = (yield ((_a = database_service_1.collections.karmas) === null || _a === void 0 ? void 0 : _a.find({}).toArray()));
-        res.status(200).send(karmas);
+        const trackers = (yield ((_a = database_service_1.collections.tracker) === null || _a === void 0 ? void 0 : _a.find({}).toArray()));
+        res.status(200).send(trackers);
     }
     catch (error) {
         res.status(500).send(error.message);
     }
 }));
-exports.karmaRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.trackerRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b, _c;
     const id = (_b = req === null || req === void 0 ? void 0 : req.params) === null || _b === void 0 ? void 0 : _b.id;
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const karma = (yield ((_c = database_service_1.collections.karmas) === null || _c === void 0 ? void 0 : _c.findOne(query)));
-        if (karma) {
-            res.status(200).send(karma);
+        const traker = (yield ((_c = database_service_1.collections.tracker) === null || _c === void 0 ? void 0 : _c.findOne(query)));
+        if (traker) {
+            res.status(200).send(traker);
         }
     }
     catch (error) {
@@ -48,13 +47,12 @@ exports.karmaRouter.get("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // POST
-exports.karmaRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d, _e;
+exports.trackerRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _d;
     try {
         console.log("Post request body:", req.body);
-        const newKarma = req.body;
-        newKarma.log_time = (_d = newKarma.log_time) !== null && _d !== void 0 ? _d : Date.now();
-        const result = yield ((_e = database_service_1.collections.karmas) === null || _e === void 0 ? void 0 : _e.insertOne(newKarma));
+        const newTrack = req.body;
+        const result = yield ((_d = database_service_1.collections.tracker) === null || _d === void 0 ? void 0 : _d.insertOne(newTrack));
         result
             ? res.status(201).send(`Successfully created a new game with id ${result.insertedId}`)
             : res.status(500).send("Failed to create a new game.");
@@ -65,13 +63,13 @@ exports.karmaRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, fu
     }
 }));
 // PUT
-exports.karmaRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f, _g;
-    const id = (_f = req === null || req === void 0 ? void 0 : req.params) === null || _f === void 0 ? void 0 : _f.id;
+exports.trackerRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _e, _f;
+    const id = (_e = req === null || req === void 0 ? void 0 : req.params) === null || _e === void 0 ? void 0 : _e.id;
     try {
-        const updatedKarma = req.body;
+        const updatedTrack = req.body;
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const result = yield ((_g = database_service_1.collections.karmas) === null || _g === void 0 ? void 0 : _g.updateOne(query, { $set: updatedKarma }));
+        const result = yield ((_f = database_service_1.collections.tracker) === null || _f === void 0 ? void 0 : _f.updateOne(query, { $set: updatedTrack }));
         result
             ? res.status(200).send(`Successfully updated game with id ${id}`)
             : res.status(304).send(`Game with id: ${id} not updated`);
@@ -82,12 +80,12 @@ exports.karmaRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 }));
 // DELETE
-exports.karmaRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _h, _j;
-    const id = (_h = req === null || req === void 0 ? void 0 : req.params) === null || _h === void 0 ? void 0 : _h.id;
+exports.trackerRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _g, _h;
+    const id = (_g = req === null || req === void 0 ? void 0 : req.params) === null || _g === void 0 ? void 0 : _g.id;
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const result = yield ((_j = database_service_1.collections.karmas) === null || _j === void 0 ? void 0 : _j.deleteOne(query));
+        const result = yield ((_h = database_service_1.collections.tracker) === null || _h === void 0 ? void 0 : _h.deleteOne(query));
         if (result && result.deletedCount) {
             res.status(202).send(`Successfully removed game with id ${id}`);
         }
