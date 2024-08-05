@@ -54,7 +54,9 @@ exports.trackerRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, 
         const newTrack = req.body;
         const result = yield ((_d = database_service_1.collections.tracker) === null || _d === void 0 ? void 0 : _d.insertOne(newTrack));
         result
-            ? res.status(201).send(`Successfully created a new game with id ${result.insertedId}`)
+            ? res
+                .status(201)
+                .send(`Successfully created a new game with id ${result.insertedId}`)
             : res.status(500).send("Failed to create a new game.");
     }
     catch (error) {
@@ -64,12 +66,18 @@ exports.trackerRouter.post("/", (req, res) => __awaiter(void 0, void 0, void 0, 
 }));
 // PUT
 exports.trackerRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e, _f;
+    var _e, _f, _g;
     const id = (_e = req === null || req === void 0 ? void 0 : req.params) === null || _e === void 0 ? void 0 : _e.id;
     try {
         const updatedTrack = req.body;
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const result = yield ((_f = database_service_1.collections.tracker) === null || _f === void 0 ? void 0 : _f.updateOne(query, { $set: updatedTrack }));
+        const key = Object.keys(updatedTrack.grades)[0];
+        const tracker = (yield ((_f = database_service_1.collections.tracker) === null || _f === void 0 ? void 0 : _f.findOne(query)));
+        tracker.grades[`${key}`] = updatedTrack.grades[`${key}`];
+        console.log(tracker);
+        const result = yield ((_g = database_service_1.collections.tracker) === null || _g === void 0 ? void 0 : _g.updateOne(query, {
+            $set: tracker,
+        }));
         result
             ? res.status(200).send(`Successfully updated game with id ${id}`)
             : res.status(304).send(`Game with id: ${id} not updated`);
@@ -81,11 +89,11 @@ exports.trackerRouter.put("/:id", (req, res) => __awaiter(void 0, void 0, void 0
 }));
 // DELETE
 exports.trackerRouter.delete("/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g, _h;
-    const id = (_g = req === null || req === void 0 ? void 0 : req.params) === null || _g === void 0 ? void 0 : _g.id;
+    var _h, _j;
+    const id = (_h = req === null || req === void 0 ? void 0 : req.params) === null || _h === void 0 ? void 0 : _h.id;
     try {
         const query = { _id: new mongodb_1.ObjectId(id) };
-        const result = yield ((_h = database_service_1.collections.tracker) === null || _h === void 0 ? void 0 : _h.deleteOne(query));
+        const result = yield ((_j = database_service_1.collections.tracker) === null || _j === void 0 ? void 0 : _j.deleteOne(query));
         if (result && result.deletedCount) {
             res.status(202).send(`Successfully removed game with id ${id}`);
         }
