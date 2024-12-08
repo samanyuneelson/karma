@@ -1,4 +1,4 @@
-import Karma from "./karma";
+import Karma, { KarmaList } from "./karma";
 import Tracker from "./tracker";
 
-export { Karma, Tracker };
+export { Karma, KarmaList, Tracker };
