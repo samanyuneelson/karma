@@ -100,7 +100,6 @@ karmaRouter.post("/karmalist", async (req: Request, res: Response) => {
 });
 
 // PUT
-
 karmaRouter.put("/karma/:id", async (req: Request, res: Response) => {
   const id = req?.params?.id;
 
@@ -171,9 +170,9 @@ karmaRouter.delete("/karmalist/:id", async (req: Request, res: Response) => {
 
   try {
     const query = { _id: new ObjectId(id) };
-    const result = await collections.karmas?.deleteOne(query);
+    const result = await collections.karmaList?.deleteOne(query);
 
-    //need to also delete all the tasks in the list
+    // TO DO: need to also delete all the tasks in the list
 
     if (result && result.deletedCount) {
       res.status(202).send(`Successfully removed karma list with id ${id}`);
